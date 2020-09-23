@@ -74,7 +74,7 @@ Resources:
         Type: CODEPIPELINE
       Source:
         Type: CODEPIPELINE
-        BuildSpec: ecs_deploy/application/deploy/buildspec.yaml
+        BuildSpec: SourceCode::ecs_deploy/application/deploy/buildspec.yml
 
   # CodePipelineに適用するIAMRole
   CodePipelineServiceRole:
