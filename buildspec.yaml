@@ -15,7 +15,8 @@ phases:
   post_build:
     commands:
       - echo Build completed on $(date)
-      - printf '{"Parameters":{"Subnet":"%s","SecurityGroup":"%s","DockerImage":"%s"}}' ${Subnet} ${SecurityGroup} ${IMAGE_NAME} > config.json
+      - printf '{"Parameters":{"Subnet":"%s","SecurityGroup":"%s","DockerImage":"%s"}}' ${Subnet} ${SecurityGroup} ${IMAGE_NAME}
+      - printf '{"Parameters":{"DockerImage":"%s"}}' ${IMAGE_NAME} > config.json
 
 artifacts:
   files: config.json
