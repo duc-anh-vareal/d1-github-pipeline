@@ -74,27 +74,7 @@ Resources:
         Type: CODEPIPELINE
       Source:
         Type: CODEPIPELINE
-        BuildSpec: |
-          version: 0.2
-          phases:
-            pre_build:
-              commands:
-                - IMAGE_NAME="${REPOSITORY_URI}:$(echo ${CODEBUILD_RESOLVED_SOURCE_VERSION} | head -c 7)"
-                - $(aws ecr get-login --no-include-email)
-            build:
-              commands:
-                - echo Build started on $(date)
-                - DEFAULT=`pwd`
-                - cd ./ecs_deploy/application
-                - docker build --tag ${IMAGE_NAME} .
-                - docker push ${IMAGE_NAME}
-                - cd ${DEFAULT}
-            post_build:
-              commands:
-                - echo Build completed on $(date)
-                - printf '{"Parameters":{"Subnet":"%s","SecurityGroup":"%s","DockerImage":"%s"}}' ${Subnet} ${SecurityGroup} ${IMAGE_NAME} > config.json
-          artifacts:
-            files: config.json
+        BuildSpec: buildspec.yaml
 
   # CodePipelineに適用するIAMRole
   CodePipelineServiceRole:
@@ -246,7 +226,7 @@ Resources:
                 ChangeSetName: ChangeSet
                 RoleArn: !GetAtt CloudFormationRole.Arn
                 Capabilities: CAPABILITY_NAMED_IAM
-                TemplatePath: SourceCode::ecs_deploy/application/deploy/ecs-service.yaml
+                TemplatePath: SourceCode::ecs-service.yaml
                 TemplateConfiguration: BuildOutput::config.json
               InputArtifacts:
                 - Name: SourceCode
